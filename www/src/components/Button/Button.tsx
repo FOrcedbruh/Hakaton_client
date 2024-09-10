@@ -1,0 +1,27 @@
+import styles from './Button.module.scss'
+import { motion } from 'framer-motion'
+
+
+interface IButton {
+    children: React.ReactNode,
+    width: string,
+    disabled?: boolean,
+    type: "button" | "submit" | "reset"
+}
+
+const Button: React.FC<IButton> = ({ children, disabled, width, type }) => {
+
+
+    return (
+        <motion.button whileHover={{scale: 1.05}}
+            whileTap={{scale: 1}}
+            type={type} 
+            className={styles.button} 
+            disabled={disabled} 
+            style={{"width": width, "backgroundColor": disabled ? "#f79f5c" : "#DC5F00", "cursor": disabled ? "not-allowed" : "pointer"}}>
+            {children}
+        </motion.button>
+    )
+}
+
+export default Button
