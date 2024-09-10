@@ -7,7 +7,7 @@
     flex-direction: column;
     align-items: center;
     nav {
-        width: 30%;
+        width: 24%;
         height: 60px;
         display: flex;
         justify-content: space-around;
@@ -21,10 +21,10 @@
             color: #EEE;
             padding: 10px 40px;
             border-radius: 20px;
+            transition: all .3s ease;
         }
-        a.active {
+        a:hover {
             background-color: #DC5F00;
-            color: #DC5F00;
         }
     }
     .outlet {

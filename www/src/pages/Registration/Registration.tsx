@@ -4,8 +4,7 @@ import eyeIcon from "./../../icons/eye.svg"
 import closeEye from "./../../icons/closeEye.svg"
 import { useState } from "react"
 import Button from "../../components/Button/Button"
-
-
+import { registration } from "../../auth/handlers"
 
 interface IFormState {
     email: string,
@@ -26,8 +25,10 @@ const Registration: React.FC = () => {
         handleSubmit
     } = useForm<IFormState>()
 
-    const onSubmit = (data: IFormState) => {
-        console.log(data)
+    const onSubmit = async (data: IFormState) => {
+        const resData = await registration(data.email, data.password)
+
+        console.log(resData)
     }
     
     return (

@@ -4,6 +4,7 @@ import eyeIcon from "./../../icons/eye.svg"
 import closeEye from "./../../icons/closeEye.svg"
 import { useState } from "react"
 import Button from "../../components/Button/Button"
+import { login } from "../../auth/handlers"
 
 
 
@@ -22,12 +23,16 @@ const Login: React.FC = () => {
             errors,
             isValid
         },
+        reset,
         register,
         handleSubmit
     } = useForm<IFormState>()
 
-    const onSubmit = (data: IFormState) => {
-        console.log(data)
+    const onSubmit = async (data: IFormState) => {
+        const resData = await login(data.email, data.password)
+
+        console.log(resData)
+        reset()
     }
     
     return (

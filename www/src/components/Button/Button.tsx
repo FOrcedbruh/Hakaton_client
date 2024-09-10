@@ -6,14 +6,16 @@ interface IButton {
     children: React.ReactNode,
     width: string,
     disabled?: boolean,
-    type: "button" | "submit" | "reset"
+    type: "button" | "submit" | "reset",
+    onClick?: () => void
 }
 
-const Button: React.FC<IButton> = ({ children, disabled, width, type }) => {
+const Button: React.FC<IButton> = ({ children, disabled, width, type, onClick }) => {
 
 
     return (
         <motion.button whileHover={{scale: 1.05}}
+            onClick={onClick}
             whileTap={{scale: 1}}
             type={type} 
             className={styles.button} 
