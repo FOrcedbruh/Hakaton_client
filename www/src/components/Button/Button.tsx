@@ -20,7 +20,7 @@ const Button: React.FC<IButton> = ({ children, disabled, width, type, onClick })
             type={type} 
             className={styles.button} 
             disabled={disabled} 
-            style={{"width": width, "backgroundColor": disabled ? "#f79f5c" : "#DC5F00", "cursor": disabled ? "not-allowed" : "pointer"}}>
+            style={{"width": width, "backgroundColor": disabled ? "#gray" : "#78B7D0", "cursor": disabled ? "not-allowed" : "pointer"}}>
             {children}
         </motion.button>
     )

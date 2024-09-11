@@ -5,6 +5,7 @@ import closeEye from "./../../icons/closeEye.svg"
 import { useState } from "react"
 import Button from "../../components/Button/Button"
 import { login } from "../../auth/handlers"
+import { useNavigate } from "react-router-dom"
 
 
 
@@ -17,6 +18,7 @@ const Login: React.FC = () => {
 
     const [viewPass, setViewPass] = useState<boolean>(false)
 
+    const navigate = useNavigate()
 
     const {
         formState: {
@@ -31,8 +33,11 @@ const Login: React.FC = () => {
     const onSubmit = async (data: IFormState) => {
         const resData = await login(data.email, data.password)
 
-        console.log(resData)
+        localStorage.setItem("user", JSON.stringify(resData))
         reset()
+        if (resData.status === 200) {
+            navigate("/")
+        }
     }
     
     return (

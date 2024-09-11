@@ -8,7 +8,9 @@ import { registration } from "../../auth/handlers"
 
 interface IFormState {
     email: string,
-    password: string
+    password: string,
+    firstname: string,
+    surname: string
 }
 
 const Registration: React.FC = () => {
@@ -21,20 +23,34 @@ const Registration: React.FC = () => {
             errors,
             isValid
         },
+        reset,
         register,
         handleSubmit
     } = useForm<IFormState>()
 
     const onSubmit = async (data: IFormState) => {
-        const resData = await registration(data.email, data.password)
+        const resData = await registration(data.email, data.password, data.firstname, data.surname)
 
-        console.log(resData)
+        localStorage.setItem("user", JSON.stringify(resData))
+        reset()
     }
     
     return (
         <section className={styles.window}>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                 <h3>Регистрация</h3>
+                <div>
+                    <label htmlFor="firstname">Полное имя</label>
+                    <input type="text" {...register("firstname", {
+                        required: "Поле обязательно"
+                    })}/>
+                </div>
+                <div>
+                    <label htmlFor="surname">Фамилия</label>
+                    <input type="text" {...register("surname", {
+                        required: "Поле обязательно"
+                    })}/>
+                </div>
                 <div>
                     <label htmlFor="email">E-mail</label>
                     <input type="email" {...register("email", {
