@@ -73,3 +73,11 @@
 .eye:hover {
     background-color: #686D76;
 }
+
+.error {
+    background-color: rgb(255, 159, 159);
+    color: rgb(131, 0, 0);
+    height: 20px;
+    width: 100%;
+    border-radius: 12px;
+}

@@ -2,9 +2,12 @@ import styles from "./Registration.module.scss"
 import { useForm } from "react-hook-form"
 import eyeIcon from "./../../icons/eye.svg"
 import closeEye from "./../../icons/closeEye.svg"
-import { useState } from "react"
+import {  useState } from "react"
 import Button from "../../components/Button/Button"
 import { registration } from "../../auth/handlers"
+import { useNavigate } from "react-router-dom"
+import { useAuthContext } from "../../context/authContext"
+
 
 interface IFormState {
     email: string,
@@ -14,6 +17,10 @@ interface IFormState {
 }
 
 const Registration: React.FC = () => {
+
+    const { setAuthUser } = useAuthContext()
+
+    const navigate = useNavigate()
 
     const [viewPass, setViewPass] = useState<boolean>(false)
 
@@ -26,12 +33,16 @@ const Registration: React.FC = () => {
         reset,
         register,
         handleSubmit
-    } = useForm<IFormState>()
+    } = useForm<IFormState>({mode: "onChange"})
 
     const onSubmit = async (data: IFormState) => {
         const resData = await registration(data.email, data.password, data.firstname, data.surname)
 
-        localStorage.setItem("user", JSON.stringify(resData))
+        localStorage.setItem("user", JSON.stringify(resData.user))
+        setAuthUser(resData.user)
+        if (resData.status === 200) {
+            navigate("/me")
+        }
         reset()
     }
     
@@ -44,12 +55,14 @@ const Registration: React.FC = () => {
                     <input type="text" {...register("firstname", {
                         required: "Поле обязательно"
                     })}/>
+                    {errors.firstname && <div className={styles.error}>{errors.firstname.message}</div>}
                 </div>
                 <div>
                     <label htmlFor="surname">Фамилия</label>
                     <input type="text" {...register("surname", {
                         required: "Поле обязательно"
                     })}/>
+                    {errors.surname && <div className={styles.error}>{errors.surname.message}</div>}
                 </div>
                 <div>
                     <label htmlFor="email">E-mail</label>
@@ -60,7 +73,7 @@ const Registration: React.FC = () => {
                             message: "Синтаксис E-mail неверный"
                         }
                     })}/>
-                    
+                    {errors.email && <div className={styles.error}>{errors.email.message}</div>}
                 </div>
                 
                 <div>
@@ -73,8 +86,9 @@ const Registration: React.FC = () => {
                                 message: "Минимальная длинна пароля 6 символов"
                             }
                         })} type={viewPass ? "text" : "password"} />
-                        <button onClick={() => setViewPass(!viewPass)} className={styles.eye}><img height={24} width={24} src={viewPass ? eyeIcon : closeEye} alt="" /></button>
+                        <button type="button" onClick={() => setViewPass(!viewPass)} className={styles.eye}><img height={24} width={24} src={viewPass ? eyeIcon : closeEye} alt="" /></button>
                     </div>
+                    {errors.password && <div className={styles.error}>{errors.password.message}</div>}
                 </div>
                 <Button width="90%" type="submit" disabled={!isValid}>
                     Создать

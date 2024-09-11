@@ -6,7 +6,7 @@ import { useState } from "react"
 import Button from "../../components/Button/Button"
 import { login } from "../../auth/handlers"
 import { useNavigate } from "react-router-dom"
-
+import { useAuthContext } from "../../context/authContext"
 
 
 interface IFormState {
@@ -15,6 +15,8 @@ interface IFormState {
 }
 
 const Login: React.FC = () => {
+
+    const { setAuthUser } = useAuthContext()
 
     const [viewPass, setViewPass] = useState<boolean>(false)
 
@@ -28,15 +30,18 @@ const Login: React.FC = () => {
         reset,
         register,
         handleSubmit
-    } = useForm<IFormState>()
+    } = useForm<IFormState>({mode: "onChange"})
 
     const onSubmit = async (data: IFormState) => {
         const resData = await login(data.email, data.password)
 
-        localStorage.setItem("user", JSON.stringify(resData))
-        reset()
+        
         if (resData.status === 200) {
-            navigate("/")
+            navigate("/me")
+            localStorage.setItem("user", JSON.stringify(resData.user))
+            setAuthUser(resData.user)
+            localStorage.setItem("id", resData.user.id)
+            reset()
         }
     }
     
@@ -53,6 +58,7 @@ const Login: React.FC = () => {
                             message: "Синтаксис E-mail неверный"
                         }
                     })}/>
+                    {errors.email && <div className={styles.error}>{errors.email.message}</div>}
                 </div>
                 
                 <div>
@@ -65,8 +71,9 @@ const Login: React.FC = () => {
                                 message: "Минимальная длинна пароля 6 символов"
                             }
                         })} type={viewPass ? "text" : "password"} />
-                        <button onClick={() => setViewPass(!viewPass)} className={styles.eye}><img height={24} width={24} src={viewPass ? eyeIcon : closeEye} alt="" /></button>
+                        <button type="button" onClick={() => setViewPass(!viewPass)} className={styles.eye}><img height={24} width={24} src={viewPass ? eyeIcon : closeEye} alt="" /></button>
                     </div>
+                    {errors.password && <div className={styles.error}>{errors.password.message}</div>}
                 </div>
                 <Button width="90%" type="submit" disabled={!isValid}>
                     Войти

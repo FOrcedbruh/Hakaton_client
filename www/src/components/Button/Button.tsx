@@ -18,7 +18,7 @@ const Button: React.FC<IButton> = ({ children, disabled, width, type, onClick })
             onClick={onClick}
             whileTap={{scale: 1}}
             type={type} 
-            className={styles.button} 
+            className={styles.button}
             disabled={disabled} 
             style={{"width": width, "backgroundColor": disabled ? "#gray" : "#78B7D0", "cursor": disabled ? "not-allowed" : "pointer"}}>
             {children}
